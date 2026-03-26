@@ -1,0 +1,294 @@
+@import url("https://fonts.googleapis.com/css2?family=Comme:wght@100;300;400;500;700&family=Epilogue:wght@400;500;600;700;800&display=swap");
+@import "tailwindcss";
+
+@theme {
+    /* ─────────────────────────────────────────
+       PALETA ESTÁTICA
+       Uso direto: bg-primary-500, text-neutral-900…
+    ───────────────────────────────────────── */
+
+    /* Primary (blue) */
+    --color-primary-50: #f0f7ff;
+    --color-primary-100: #e0efff;
+    --color-primary-200: #bae6fd;
+    --color-primary-300: #7dd3fc;
+    --color-primary-400: #38bdf8;
+    --color-primary-500: #0ea5e9;
+    --color-primary-600: #0284c7;
+    --color-primary-700: #0369a1;
+    --color-primary-800: #075985;
+    --color-primary-900: #0c3d66;
+
+    /* Secondary (violet) */
+    --color-secondary-50: #f5f3ff;
+    --color-secondary-100: #ede9fe;
+    --color-secondary-200: #ddd6fe;
+    --color-secondary-300: #cab5fd;
+    --color-secondary-400: #a78bfa;
+    --color-secondary-500: #8b5cf6;
+    --color-secondary-600: #7c3aed;
+    --color-secondary-700: #6d28d9;
+    --color-secondary-800: #5b21b6;
+    --color-secondary-900: #3f0f8f;
+
+    /* Accent (pink) */
+    --color-accent-50: #fdf2f8;
+    --color-accent-100: #fce7f3;
+    --color-accent-200: #fbcfe8;
+    --color-accent-300: #f8b4d8;
+    --color-accent-400: #f472b6;
+    --color-accent-500: #ec4899;
+    --color-accent-600: #db2777;
+    --color-accent-700: #be185d;
+    --color-accent-800: #9d174d;
+    --color-accent-900: #831843;
+
+    /* Success */
+    --color-success-50: #f0fdf4;
+    --color-success-100: #dcfce7;
+    --color-success-200: #bbf7d0;
+    --color-success-300: #86efac;
+    --color-success-400: #4ade80;
+    --color-success-500: #22c55e;
+    --color-success-600: #16a34a;
+    --color-success-700: #15803d;
+    --color-success-800: #166534;
+    --color-success-900: #145231;
+
+    /* Warning */
+    --color-warning-50: #fffbeb;
+    --color-warning-100: #fef3c7;
+    --color-warning-200: #fde68a;
+    --color-warning-300: #fcd34d;
+    --color-warning-400: #fbbf24;
+    --color-warning-500: #f59e0b;
+    --color-warning-600: #d97706;
+    --color-warning-700: #b45309;
+    --color-warning-800: #92400e;
+    --color-warning-900: #78350f;
+
+    /* Error */
+    --color-error-50: #fef2f2;
+    --color-error-100: #fee2e2;
+    --color-error-200: #fecaca;
+    --color-error-300: #fca5a5;
+    --color-error-400: #f87171;
+    --color-error-500: #ef4444;
+    --color-error-600: #dc2626;
+    --color-error-700: #b91c1c;
+    --color-error-800: #991b1b;
+    --color-error-900: #7f1d1d;
+
+    /* Neutral */
+    --color-neutral-50: #f9fafb;
+    --color-neutral-100: #f3f4f6;
+    --color-neutral-200: #e5e7eb;
+    --color-neutral-300: #d1d5db;
+    --color-neutral-400: #9ca3af;
+    --color-neutral-500: #6b7280;
+    --color-neutral-600: #4b5563;
+    --color-neutral-700: #374151;
+    --color-neutral-800: #1f2937;
+    --color-neutral-900: #111827;
+
+    /* MediumPurple */
+    --color-mediumpurple-50: oklch(0.976 0.014 304.1);
+    --color-mediumpurple-100: oklch(0.958 0.021 288.9);
+    --color-mediumpurple-200: oklch(0.896 0.06 301.1);
+    --color-mediumpurple-300: oklch(0.814 0.11 300.1);
+    --color-mediumpurple-400: oklch(0.689 0.183 294.4);
+    --color-mediumpurple-500: oklch(0.599 0.238 295.2);
+    --color-mediumpurple-600: oklch(0.528 0.259 292.3);
+    --color-mediumpurple-700: oklch(0.468 0.241 291.5);
+    --color-mediumpurple-800: oklch(0.414 0.201 293.7);
+    --color-mediumpurple-900: oklch(0.36 0.17 295.1);
+    --color-mediumpurple-950: oklch(0.272 0.145 291.6);
+
+    /* ─────────────────────────────────────────
+       TOKENS SEMÂNTICOS (theme-aware)
+       Cada token aponta para uma CSS var interna
+       definida em @layer base que alterna com o tema.
+
+       Uso:
+         bg-surface          → fundo principal da página
+         bg-surface-raised   → fundo de cards / painéis
+         bg-surface-overlay  → fundo de badges / overlays sutis
+
+         text-content           → texto principal
+         text-content-subtle    → texto secundário
+         text-content-muted     → texto de apoio / placeholder
+         text-content-inverted  → texto sobre fundos escuros (light) ou claros (dark)
+
+         border-stroke        → borda padrão
+         border-stroke-subtle → borda sutil / divisor
+
+         bg-brand             → cor de ação principal (botões, destaques)
+         bg-brand-hover       → hover do brand
+         text-brand           → texto com cor de brand
+         border-brand         → borda com cor de brand
+
+         text-link            → cor padrão de links
+         text-link-hover      → hover de links
+    ───────────────────────────────────────── */
+
+    /* Surfaces */
+    --color-surface: var(--surface);
+    --color-surface-raised: var(--surface-raised);
+    --color-surface-overlay: var(--surface-overlay);
+
+    /* Content / Text */
+    --color-content: var(--content);
+    --color-content-subtle: var(--content-subtle);
+    --color-content-muted: var(--content-muted);
+    --color-content-inverted: var(--content-inverted);
+
+    /* Strokes / Borders */
+    --color-stroke: var(--stroke);
+    --color-stroke-subtle: var(--stroke-subtle);
+
+    /* Brand (cor interativa principal — ex: botões) */
+    --color-brand: var(--brand);
+    --color-brand-hover: var(--brand-hover);
+
+    /* Links */
+    --color-link: var(--link);
+    --color-link-hover: var(--link-hover);
+}
+
+/* ─────────────────────────────────────────
+   VALORES DOS TOKENS POR TEMA
+   :root          → dark (padrão)
+   [data-theme="light"] → light (opt-in via switch)
+───────────────────────────────────────── */
+@layer base {
+    :root {
+        /* Surfaces — dark */
+        --surface: var(--color-neutral-900);
+        --surface-raised: var(--color-neutral-800);
+        --surface-overlay: var(--color-neutral-700);
+
+        /* Content — dark */
+        --content: var(--color-neutral-50);
+        --content-subtle: var(--color-neutral-300);
+        --content-muted: var(--color-neutral-400);
+        --content-inverted: var(--color-neutral-900);
+
+        /* Strokes — dark */
+        --stroke: var(--color-neutral-700);
+        --stroke-subtle: var(--color-neutral-600);
+
+        /* Brand — dark (tom mais vibrante funciona bem em fundos escuros) */
+        --brand: var(--color-mediumpurple-500);
+        --brand-hover: var(--color-mediumpurple-400);
+
+        /* Links — dark (claro para contrastar com fundo escuro) */
+        --link: var(--color-primary-400);
+        --link-hover: var(--color-primary-300);
+    }
+
+    [data-theme="light"] {
+        /* Surfaces — light */
+        --surface: var(--color-neutral-50);
+        --surface-raised: var(--color-neutral-100);
+        --surface-overlay: var(--color-neutral-200);
+
+        /* Content — light */
+        --content: var(--color-neutral-900);
+        --content-subtle: var(--color-neutral-700);
+        --content-muted: var(--color-neutral-500);
+        --content-inverted: var(--color-neutral-50);
+
+        /* Strokes — light */
+        --stroke: var(--color-neutral-300);
+        --stroke-subtle: var(--color-neutral-200);
+
+        /* Brand — light (tom mais saturado para contraste em fundo claro) */
+        --brand: var(--color-mediumpurple-600);
+        --brand-hover: var(--color-mediumpurple-700);
+
+        /* Links — light (escuro para contrastar com fundo claro) */
+        --link: var(--color-primary-600);
+        --link-hover: var(--color-primary-700);
+    }
+
+    /* ─── Estilos base ─── */
+
+    body {
+        background-color: var(--surface);
+        color: var(--content);
+        font-family: "Comme", sans-serif;
+        line-height: 1.5;
+        transition:
+            background-color 0.3s,
+            color 0.3s;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: "Epilogue", sans-serif;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    h1 {
+        font-size: 2.25rem;
+    }
+    h2 {
+        font-size: 1.875rem;
+    }
+    h3 {
+        font-size: 1.5rem;
+    }
+    h4 {
+        font-size: 1.25rem;
+    }
+    h5 {
+        font-size: 1.125rem;
+        font-weight: 600;
+    }
+    h6 {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    p {
+        color: var(--content-subtle);
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    /* Links — alternam automaticamente via --link / --link-hover */
+    a {
+        color: var(--link);
+        transition: color 0.2s;
+    }
+
+    a:hover {
+        color: var(--link-hover);
+    }
+
+    @media (min-width: 768px) {
+        h1 {
+            font-size: 3rem;
+        }
+        h2 {
+            font-size: 2.25rem;
+        }
+        h3 {
+            font-size: 1.875rem;
+        }
+        h4 {
+            font-size: 1.5rem;
+        }
+        h5 {
+            font-size: 1.25rem;
+        }
+        h6 {
+            font-size: 1.125rem;
+        }
+    }
+}
