@@ -13,10 +13,10 @@ import {
 // Não precisa escrever interfaces TyoesScript separadas. O Zod gera os
 // tipos a partir dos schemas definidos.
 export type ResumoJogo = z.infer<typeof resumoJogoSchema>;
+export type ObterJogo = z.infer<typeof obterJogoSchema>;
 export type JogosSearch = z.infer<typeof JogosSearchSchema>;
 export type JogoFiltros = JogosSearch;
 export type ListarJogosResponse = z.infer<typeof listarJogosSchema>;
-export type ObterJogo = z.infer<typeof obterJogoSchema>;
 export type CriarJogoResponse = z.infer<typeof criarJogoResponseSchema>;
 export type CriarJogoRequest = z.infer<typeof criarJogoRequestSchema>;
 export type AtualizarJogo = z.infer<typeof atualizarJogoSchema>;

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useJogos } from "@/features/jogos/hooks/useJogos";
-import JogoCard from "@/features/jogos/components/jogoCard";
+import JogoCard from "@/features/jogos/components/JogoCard";
 import { JogosSearchSchema } from "@/features/jogos/schemas";
 
 export const Route = createFileRoute("/jogos/")({

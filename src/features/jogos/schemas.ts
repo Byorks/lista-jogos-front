@@ -1,4 +1,4 @@
-import { nonnegative, z } from "zod";
+import { z } from "zod";
 import { ResumoPlataforma } from "../plataformas/schemas";
 
 // z.object define a forma do objeto — igual uma interface TS,
@@ -19,6 +19,19 @@ const jogoResponseFields = {
   dataAdicionado: z.iso.date(),
 };
 
+const jogoResumoSchema = {
+  status: z
+    .enum(["naoDefinido", "jogando", "concluido", "congelado"])
+    .nullable()
+    .optional(),
+  capaUrl: z.url().max(100).nullable().optional(),
+  nota: z.int().lte(5).gte(0).nullable().optional(),
+  favorito: z.boolean(),
+  desenvolvedoraNome: z.string().nullable().optional(),
+  generosNomes: z.array(z.string()).nullable().default([]),
+  plataformas: z.array(ResumoPlataforma).nullable().default([]),
+};
+
 // ─── Schemas compostos com os blocos ─────────────────────
 // ─── 1. Resposta do GET /jogos (listagem) ─────────────
 // Corresponde ao ListarJogosRequest do C#
@@ -27,7 +40,7 @@ const jogoResponseFields = {
 export const JogosSearchSchema = z.object({
   filtroTitulo: z.string().optional(),
   status: z
-    .enum(["NaoDefinido", "Jogando", "Concluido", "Congelado"]) // tudo minúsculo para consistência
+    .enum(["naoDefinido", "jogando", "concluido", "congelado"]) // tudo minúsculo para consistência
     .optional(),
   notaMinima: z.coerce.number().min(0).max(10).optional(),
   ehFavorito: z.boolean().optional(),
@@ -48,16 +61,7 @@ export const JogosSearchSchema = z.object({
 export const resumoJogoSchema = z.object({
   ...jogoSchemaBase,
   ...jogoResponseFields,
-  status: z
-    .enum(["NaoDefinido", "Jogando", "Concluido", "Congelado"])
-    .nullable()
-    .optional(),
-  capaUrl: z.url().max(100).nullable().optional(),
-  nota: z.int().lte(5).gte(0).nullable().optional(),
-  favorito: z.boolean(),
-  desenvolvedoraNome: z.string().nullable().optional(),
-  generosNomes: z.array(z.string()).nullable().default([]),
-  plataformas: z.array(ResumoPlataforma).nullable().default([]),
+  ...jogoResumoSchema,
 });
 
 // Corresponde ao ListarJogosResponse do C#
@@ -71,7 +75,12 @@ export const listarJogosSchema = z.object({
 
 // ─── 2. Resposta do GET /jogos/{id} (detalhe) ────────────
 // Corresponde ao ObterJogoResponse do C#
-export const obterJogoSchema = resumoJogoSchema.extend({
+export const obterJogoSchema = z.object({
+  ...jogoResumoSchema,
+  titulo: z
+    .string()
+    .max(100, { message: "O título não pode exceder 100 caracteres" })
+    .nonoptional(),
   sinopse: z
     .string()
     .max(1500, { message: "A sinopse não pode exceder 1500 caracteres" })
@@ -99,7 +108,7 @@ export const criarJogoRequestSchema = z.object({
     .max(1500, { message: "A sinopse não pode exceder 1500 caracteres" })
     .nullable(),
   status: z
-    .enum(["NaoDefinido", "Jogando", "Concluido", "Congelado"])
+    .enum(["naoDefinido", "jogando", "concluido", "congelado"])
     .nullable(),
   capaUrl: z.url().max(100).nullable(),
   nota: z.int().lte(5).gte(0).nullable(),

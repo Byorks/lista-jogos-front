@@ -1,6 +1,6 @@
 import { apiClient } from "@/shared/api"; // helper fetch centralizado
 import {
-  resumoJogoSchema,
+  obterJogoSchema,
   listarJogosSchema,
   criarJogoResponseSchema,
 } from "./schemas";
@@ -38,6 +38,17 @@ export const jogosService = {
     }
     // .parse() vai validar e lançar um erro se a validação falhar
     // garante que o retorno é do tipo esperado (ListarJogos)
+    return resultado.data;
+  },
+  getById: async (jogoId: string): Promise<ObterJogo> => {
+    const response = await apiClient.get<unknown>(`${BASE}/${jogoId}`);
+    const resultado = obterJogoSchema.safeParse(response);
+
+    if (!resultado.success) {
+      console.error("Zod validation errors:", resultado.error.format());
+      throw new Error("Dados inválidos recebidos da API");
+    }
+
     return resultado.data;
   },
 

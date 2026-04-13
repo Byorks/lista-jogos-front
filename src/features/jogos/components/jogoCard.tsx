@@ -1,4 +1,5 @@
 import type { ResumoJogo } from "../types";
+import { Link } from "@tanstack/react-router";
 
 const JogoCard = ({ jogo }: { jogo: ResumoJogo }) => {
   return (
@@ -20,9 +21,14 @@ const JogoCard = ({ jogo }: { jogo: ResumoJogo }) => {
           <span key={index}>{genero}</span>
         ))}
       </div>
-      <button className="bg-brand hover:bg-brand-hover p-2">
-        Ver detalhes
-      </button>
+
+      <div>
+        <Link to={`/jogos/$jogoId`} params={{ jogoId: jogo.id }}>
+          <button className="bg-brand hover:bg-brand-hover p-2">
+            Ver detalhes
+          </button>
+        </Link>
+      </div>
     </div>
   );
 };
