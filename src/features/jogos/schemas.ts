@@ -57,6 +57,11 @@ export const JogosSearchSchema = z.object({
     .default(10),
 });
 
+// resumo para desenvolvedoraId
+export const resumoJogoPorDesenvolvedoraSchema = z.object({
+  ...jogoSchemaBase,
+});
+
 // Corresponde  a record ResumoJogo do C#
 export const resumoJogoSchema = z.object({
   ...jogoSchemaBase,

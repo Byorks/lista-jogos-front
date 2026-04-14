@@ -39,5 +39,10 @@ export const useJogos = (filtrosIniciais?: JogoFiltros) => {
     buscar();
   }, [buscar]);
 
-  return { dados, filtros, setFiltros, error, loading, buscar };
+  const criar = async (input: CriarJogoRequest) => {
+    await jogosService.create(input);
+    await buscar(); // refetch após criar
+  };
+
+  return { dados, filtros, setFiltros, error, loading, buscar, criar };
 };

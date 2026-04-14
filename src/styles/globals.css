@@ -7,29 +7,31 @@
        Uso direto: bg-primary-500, text-neutral-900…
     ───────────────────────────────────────── */
 
-    /* Primary (blue) */
-    --color-primary-50: #f0f7ff;
-    --color-primary-100: #e0efff;
-    --color-primary-200: #bae6fd;
-    --color-primary-300: #7dd3fc;
-    --color-primary-400: #38bdf8;
-    --color-primary-500: #0ea5e9;
-    --color-primary-600: #0284c7;
-    --color-primary-700: #0369a1;
-    --color-primary-800: #075985;
-    --color-primary-900: #0c3d66;
+    /* Primary (Spring Green) */
+    --color-primary-50: #eefff6;
+    --color-primary-100: #d6ffeb;
+    --color-primary-200: #b0ffd8;
+    --color-primary-300: #73ffbc;
+    --color-primary-400: #51faaa; /* main */
+    --color-primary-500: #04e37a;
+    --color-primary-600: #00bd64;
+    --color-primary-700: #019450;
+    --color-primary-800: #087342;
+    --color-primary-900: #085f39;
+    --color-primary-950: #00351f;
 
-    /* Secondary (violet) */
-    --color-secondary-50: #f5f3ff;
-    --color-secondary-100: #ede9fe;
-    --color-secondary-200: #ddd6fe;
-    --color-secondary-300: #cab5fd;
-    --color-secondary-400: #a78bfa;
-    --color-secondary-500: #8b5cf6;
-    --color-secondary-600: #7c3aed;
-    --color-secondary-700: #6d28d9;
-    --color-secondary-800: #5b21b6;
-    --color-secondary-900: #3f0f8f;
+    /* Secondary (Lavender Magenta) */
+    --color-secondary-50: #fef3ff;
+    --color-secondary-100: #fde7ff;
+    --color-secondary-200: #fcceff;
+    --color-secondary-300: #fea7ff;
+    --color-secondary-400: #ff81ff; /* secondary */
+    --color-secondary-500: #f73ef7;
+    --color-secondary-600: #db1ed7;
+    --color-secondary-700: #b615af;
+    --color-secondary-800: #95138e;
+    --color-secondary-900: #791671;
+    --color-secondary-950: #51014b;
 
     /* Accent (pink) */
     --color-accent-50: #fdf2f8;
@@ -150,6 +152,9 @@
     --color-brand: var(--brand);
     --color-brand-hover: var(--brand-hover);
 
+    /* Brand secondary color */
+    --color-brand-sec: var(--brand);
+
     /* Links */
     --color-link: var(--link);
     --color-link-hover: var(--link-hover);
@@ -178,8 +183,11 @@
         --stroke-subtle: var(--color-neutral-600);
 
         /* Brand — dark (tom mais vibrante funciona bem em fundos escuros) */
-        --brand: var(--color-mediumpurple-500);
-        --brand-hover: var(--color-mediumpurple-400);
+        --brand: var(--color-primary-400);
+        --brand-hover: var(--color-primary-600);
+
+        --brand-sec: var(--color-secondary-400);
+        --brand-sec-hover: var(--color-secondary-600);
 
         /* Links — dark (claro para contrastar com fundo escuro) */
         --link: var(--color-primary-400);

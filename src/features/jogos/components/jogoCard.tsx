@@ -24,7 +24,7 @@ const JogoCard = ({ jogo }: { jogo: ResumoJogo }) => {
 
       <div>
         <Link to={`/jogos/$jogoId`} params={{ jogoId: jogo.id }}>
-          <button className="bg-brand hover:bg-brand-hover p-2">
+          <button className="bg-brand hover:bg-brand-hover p-2 text-content-inverted rounded-md hover:cursor-pointer">
             Ver detalhes
           </button>
         </Link>

@@ -13,6 +13,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as JogosIndexRouteImport } from './routes/jogos/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as JogosNewRouteImport } from './routes/jogos/new'
 import { Route as JogosJogoIdIndexRouteImport } from './routes/jogos/$jogoId/index'
 
 const AboutRoute = AboutRouteImport.update({
@@ -35,6 +36,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JogosNewRoute = JogosNewRouteImport.update({
+  id: '/jogos/new',
+  path: '/jogos/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const JogosJogoIdIndexRoute = JogosJogoIdIndexRouteImport.update({
   id: '/jogos/$jogoId/',
   path: '/jogos/$jogoId/',
@@ -44,6 +50,7 @@ const JogosJogoIdIndexRoute = JogosJogoIdIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/jogos/new': typeof JogosNewRoute
   '/admin/': typeof AdminIndexRoute
   '/jogos/': typeof JogosIndexRoute
   '/jogos/$jogoId/': typeof JogosJogoIdIndexRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/jogos/new': typeof JogosNewRoute
   '/admin': typeof AdminIndexRoute
   '/jogos': typeof JogosIndexRoute
   '/jogos/$jogoId': typeof JogosJogoIdIndexRoute
@@ -59,21 +67,36 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/jogos/new': typeof JogosNewRoute
   '/admin/': typeof AdminIndexRoute
   '/jogos/': typeof JogosIndexRoute
   '/jogos/$jogoId/': typeof JogosJogoIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/admin/' | '/jogos/' | '/jogos/$jogoId/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/jogos/new'
+    | '/admin/'
+    | '/jogos/'
+    | '/jogos/$jogoId/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/admin' | '/jogos' | '/jogos/$jogoId'
-  id: '__root__' | '/' | '/about' | '/admin/' | '/jogos/' | '/jogos/$jogoId/'
+  to: '/' | '/about' | '/jogos/new' | '/admin' | '/jogos' | '/jogos/$jogoId'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/jogos/new'
+    | '/admin/'
+    | '/jogos/'
+    | '/jogos/$jogoId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  JogosNewRoute: typeof JogosNewRoute
   AdminIndexRoute: typeof AdminIndexRoute
   JogosIndexRoute: typeof JogosIndexRoute
   JogosJogoIdIndexRoute: typeof JogosJogoIdIndexRoute
@@ -109,6 +132,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/jogos/new': {
+      id: '/jogos/new'
+      path: '/jogos/new'
+      fullPath: '/jogos/new'
+      preLoaderRoute: typeof JogosNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/jogos/$jogoId/': {
       id: '/jogos/$jogoId/'
       path: '/jogos/$jogoId'
@@ -122,6 +152,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  JogosNewRoute: JogosNewRoute,
   AdminIndexRoute: AdminIndexRoute,
   JogosIndexRoute: JogosIndexRoute,
   JogosJogoIdIndexRoute: JogosJogoIdIndexRoute,
