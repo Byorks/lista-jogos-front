@@ -7,7 +7,7 @@ import { ResumoPlataforma } from "../plataformas/schemas";
 // Campos que aparecem em TODOS os schemas de produto
 // Não é um schema completo — é um bloco reutilizável
 const jogoSchemaBase = {
-  id: z.string(),
+  id: z.guid(),
   titulo: z
     .string()
     .max(100, { message: "O título não pode exceder 100 caracteres" })
