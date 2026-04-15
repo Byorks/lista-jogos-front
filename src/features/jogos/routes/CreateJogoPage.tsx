@@ -7,7 +7,7 @@ export const CreateJogoPage = () => {
   return (
     <section className="bg-surface w-screen">
       <div className="max-w-7xl mx-auto py-6">
-        <h2>Criação de Jogo</h2>
+        <h2>Adicionar Jogo</h2>
 
         <JogoForm onSubmit={(data) => (console.log(data), criar(data))} />
       </div>

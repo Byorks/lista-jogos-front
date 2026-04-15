@@ -2,11 +2,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { criarJogoRequestSchema } from "../schemas";
 import type { CriarJogoRequest } from "../types";
-import type { ResumoDesenvolvedoraType } from "@/features/desenvolvedoras/types";
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { desevolvedorasService } from "@/features/desenvolvedoras/service";
-import { DevCombobox } from "@/shared/Components/Combobox";
-import { set } from "zod/v3";
+import { Combobox } from "@/shared/Components/Combobox";
 
 // TODO:
 // [] Corrigir problema ao selecionar desenvolvedora
@@ -45,8 +43,6 @@ export function JogoForm({ onSubmit }: Props) {
     },
   });
 
-  const [desenvolvedoraId, setDesenvolvedoraId] = useState(null);
-
   // texto visível no input
   const [buscaDev, setBuscaDev] = useState("");
 
@@ -55,15 +51,12 @@ export function JogoForm({ onSubmit }: Props) {
   // lista de sugestões de desenvolvedoras
   const [sugestoesDev, setSugestoesDev] = useState<DevOption[]>([]);
 
-  // controla abertura da lista de sugestoesDev
-  const [mostrarSugestoes, setMostrarSugestoes] = useState(false);
-
   // loading da buscaDev
   const [loadingDev, setLoadingDev] = useState(false);
 
   const carregarDesenvolvedoras = useCallback(async () => {
     // evita buscar com texto vazio ou muito curto
-    if (buscaDev.trim().length < 3) {
+    if (buscaDev.trim().length < 2) {
       setSugestoesDev([]);
       return;
     }
@@ -75,9 +68,18 @@ export function JogoForm({ onSubmit }: Props) {
         direcao: "",
       });
 
-      console.log(resultado);
-      setSugestoesDev(resultado);
-      setMostrarSugestoes(true);
+      const options = resultado
+        .map((dev) =>
+          dev.id
+            ? {
+                id: dev.id,
+                nome: dev.nome,
+              }
+            : null,
+        )
+        .filter((dev): dev is DevOption => dev !== null);
+
+      setSugestoesDev(options);
     } catch (error) {
       console.error("Erro ao buscar desenvolvedoras", error);
     } finally {
@@ -85,23 +87,36 @@ export function JogoForm({ onSubmit }: Props) {
     }
   }, [buscaDev]);
 
+  const listarDesenvolvedoras = useCallback(async () => {
+    try {
+      setLoadingDev(true);
+      const resultado = await desevolvedorasService.getAll({
+        filtroNome: "",
+        direcao: "",
+      });
+
+      const options = resultado
+        .map((dev) =>
+          dev.id
+            ? {
+                id: dev.id,
+                nome: dev.nome,
+              }
+            : null,
+        )
+        .filter((dev): dev is DevOption => dev !== null);
+
+      setSugestoesDev(options);
+    } catch (error) {
+      console.error("Erro ao listar desenvolvedoras", error);
+    } finally {
+      setLoadingDev(false);
+    }
+  }, []);
+
   useEffect(() => {
     carregarDesenvolvedoras();
   }, [carregarDesenvolvedoras]);
-
-  const selecionarDesenvolvedora = (dev: DevOption) => {
-    // mostra o nome do input
-    setBuscaDev(dev.nome);
-
-    // salva o id no form e valida
-    setValue("desenvolvedoraId", dev.id, {
-      shouldValidate: true,
-      shouldDirty: true,
-    });
-
-    // fecha as sugestões
-    setMostrarSugestoes(false);
-  };
 
   const inputClasses =
     "w-full bg-[#161827] border border-[#211f36] rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#51FAAA] focus:ring-1 focus:ring-[#51FAAA] transition-colors";
@@ -116,7 +131,15 @@ export function JogoForm({ onSubmit }: Props) {
       <div className="absolute bottom-[-50px] left-[-50px] w-60 h-60 bg-[#FF81FF] opacity-10 blur-3xl rounded-full pointer-events-none" />
 
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(
+          async (data) => {
+            console.log("submit válido", data);
+            await onSubmit(data);
+          },
+          (errors) => {
+            console.log("submit inválido", errors);
+          },
+        )}
         className="space-y-6 relative z-10"
       >
         <div>
@@ -171,7 +194,9 @@ export function JogoForm({ onSubmit }: Props) {
               type="number"
               min={0}
               max={5}
-              {...register("nota", { valueAsNumber: true })}
+              {...register("nota", {
+                setValueAs: (value) => (value === "" ? null : Number(value)),
+              })}
               placeholder="0 a 5"
               className={inputClasses}
             />
@@ -188,7 +213,9 @@ export function JogoForm({ onSubmit }: Props) {
             </label>
             <input
               type="url"
-              {...register("capaUrl")}
+              {...register("capaUrl", {
+                setValueAs: (value) => (value === "" ? null : value),
+              })}
               placeholder="https://..."
               className={inputClasses}
             />
@@ -204,7 +231,9 @@ export function JogoForm({ onSubmit }: Props) {
             <input
               id="dataLancamento"
               type="date"
-              {...register("dataLancamento")}
+              {...register("dataLancamento", {
+                setValueAs: (value) => (value === "" ? null : value),
+              })}
               className={`${inputClasses} scheme-dark`}
             />
             {errors.dataLancamento && (
@@ -260,64 +289,7 @@ export function JogoForm({ onSubmit }: Props) {
           )}
         </div>
 
-        <div className="relative">
-          <label htmlFor="desenvolvedoraBusca" className={labelClasses}>
-            Desenvolvedora
-          </label>
-          <input
-            id="desenvolvedoraBusca"
-            type="text"
-            value={buscaDev}
-            placeholder="Digite o nome da desenvolvedora..."
-            className={inputClasses}
-            onChange={(e) => {
-              const valor = e.target.value;
-              setBuscaDev(valor);
-              setMostrarSugestoes(true);
-              setValue("desenvolvedoraId", null, {
-                shouldValidate: true,
-                shouldDirty: true,
-              });
-
-              setMostrarSugestoes(valor.trim().length >= 3);
-            }}
-            autoComplete="off"
-          />
-
-          {loadingDev && (
-            <p className="text-[#51FAAA] text-xs mt-2 ml-1">
-              Buscando desenvolvedoras...
-            </p>
-          )}
-
-          {mostrarSugestoes && sugestoesDev.length > 0 && (
-            <ul className="absolute z-20 w-full mt-2 bg-[#161827] border border-[#211f36] rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.8)] max-h-48 overflow-auto custom-scrollbar">
-              {sugestoesDev.map((dev) => (
-                <li
-                  key={dev.id}
-                  className="border-b border-[#211f36] last:border-0"
-                >
-                  <button
-                    type="button"
-                    className="w-full text-left px-4 py-3 text-gray-300 hover:bg-[#211f36] hover:text-[#51FAAA] transition-colors focus:bg-[#211f36] focus:outline-none"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      selecionarDesenvolvedora(dev);
-                    }}
-                  >
-                    {dev.nome}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-
-          {errors.desenvolvedoraId && (
-            <p className={errorClasses}>{errors.desenvolvedoraId.message}</p>
-          )}
-        </div>
-
-        <DevCombobox
+        <Combobox
           value={devSelecionada}
           onChange={(dev) => {
             setDevSelecionada(dev);
@@ -331,6 +303,11 @@ export function JogoForm({ onSubmit }: Props) {
           loading={loadingDev}
           onSearch={(term) => {
             setBuscaDev(term);
+          }}
+          onOpen={() => {
+            if (buscaDev.trim().length >= 2) return;
+
+            listarDesenvolvedoras();
           }}
         />
 

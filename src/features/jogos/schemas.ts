@@ -44,7 +44,7 @@ export const JogosSearchSchema = z.object({
     .optional(),
   notaMinima: z.coerce.number().min(0).max(10).optional(),
   ehFavorito: z.boolean().optional(),
-  generoId: z.uuid().optional(), // valida UUID se quiser
+  generoId: z.guid().optional(), // valida UUID se quiser
   ordenarPor: z.enum(["titulo", "nota", "dataAdicionado"]).optional(),
   direcao: z.enum(["asc", "desc"]).optional(),
   paginaAtual: z.coerce.number().int().min(1).optional().default(1),
@@ -91,7 +91,7 @@ export const obterJogoSchema = z.object({
     .max(1500, { message: "A sinopse não pode exceder 1500 caracteres" })
     .nullable(),
   analise: z.string().max(3000).nullable(),
-  desenvolvedoraId: z.uuid().nullable(),
+  desenvolvedoraId: z.guid().nullable(),
 });
 
 // ─── 3. Body do POST /jogos (criação) ────────────
@@ -99,7 +99,7 @@ export const obterJogoSchema = z.object({
 export const criarJogoResponseSchema = z.object({
   ...jogoSchemaBase,
   ...jogoResponseFields,
-  desenvolvedoraId: z.uuid().nullable(),
+  desenvolvedoraId: z.guid().nullable(),
   desenvolvedoraNome: z.string().nullable(),
 });
 
@@ -120,7 +120,7 @@ export const criarJogoRequestSchema = z.object({
   dataLancamento: z.iso.date().nullable(),
   linkSteam: z.url().max(100).nullable(),
   favorito: z.boolean().optional(),
-  desenvolvedoraId: z.uuid().nullable(),
+  desenvolvedoraId: z.guid().nullable(),
 });
 
 // ─── 4. Body do PUT /jogos/{id} (atualização) ────────────

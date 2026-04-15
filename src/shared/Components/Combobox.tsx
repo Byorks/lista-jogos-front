@@ -12,14 +12,16 @@ type Props = {
   options: DevOption[];
   loading?: boolean;
   onSearch: (term: string) => void;
+  onOpen?: () => void;
 };
 
-export function DevCombobox({
+export function Combobox({
   value,
   onChange,
   options,
   loading = false,
   onSearch,
+  onOpen,
 }: Props) {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
@@ -60,20 +62,26 @@ export function DevCombobox({
     onSearch("");
   };
 
+  const handleOpen = () => {
+    setOpen(true);
+
+    if (query.trim().length === 0) onOpen?.();
+  };
+
   return (
     <div ref={containerRef} className="relative w-full">
-      <label className="mb-2 block text-sm font-medium text-white">
+      <label className="block text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2 ml-1">
         Desenvolvedora
       </label>
 
-      <div className="flex h-11 items-center rounded-md border border-zinc-400 bg-white px-3 focus-within:border-blue-500">
+      <div className="flex items-center w-full bg-[#161827] border border-[#211f36] rounded-xl px-4 py-3 focus-within:border-brand focus-within:ring-1 focus-within:ring-brand transition-colors">
         <input
           type="text"
           value={query}
           onChange={(e) => handleInputChange(e.target.value)}
-          onFocus={() => setOpen(true)}
-          placeholder="Digite o nome da desenvolvedora"
-          className="flex-1 bg-transparent text-sm text-black outline-none"
+          onFocus={handleOpen}
+          placeholder="Digite o nome da desenvolvedora..."
+          className="flex-1 bg-transparent text-white placeholder-gray-500 outline-none"
           autoComplete="off"
         />
 
@@ -81,7 +89,7 @@ export function DevCombobox({
           <button
             type="button"
             onClick={handleClear}
-            className="mr-1 p-1 text-zinc-500 hover:text-zinc-800"
+            className="mr-1 p-1 text-gray-500 hover:text-brand transition-colors outline-none"
             aria-label="Limpar campo"
           >
             <X size={16} />
@@ -90,8 +98,15 @@ export function DevCombobox({
 
         <button
           type="button"
-          onClick={() => setOpen((prev) => !prev)}
-          className="p-1 text-zinc-600 hover:text-zinc-900"
+          onClick={() => {
+            if (open) {
+              setOpen(false);
+              return;
+            }
+
+            handleOpen();
+          }}
+          className="p-1 text-gray-500 hover:text-brand transition-colors outline-none"
           aria-label="Abrir opções"
         >
           <ChevronDown size={18} />
@@ -99,24 +114,27 @@ export function DevCombobox({
       </div>
 
       {open && (
-        <div className="absolute z-20 mt-1 w-full rounded-md border border-zinc-300 bg-white shadow-lg">
+        <div className="absolute z-20 w-full mt-2 bg-[#161827] border border-[#211f36] rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.8)] max-h-48 overflow-auto custom-scrollbar">
           {loading ? (
-            <p className="px-3 py-2 text-sm text-zinc-500">Buscando...</p>
+            <p className="px-4 py-3 text-brand text-xs">Buscando...</p>
           ) : options.length === 0 ? (
-            <p className="px-3 py-2 text-sm text-zinc-500">
+            <p className="px-4 py-3 text-gray-400 text-xs">
               Nenhuma desenvolvedora encontrada
             </p>
           ) : (
-            <ul className="max-h-60 overflow-y-auto py-1">
+            <ul className="w-full">
               {options.map((dev) => (
-                <li key={dev.id}>
+                <li
+                  key={dev.id}
+                  className="border-b border-[#211f36] last:border-0"
+                >
                   <button
                     type="button"
                     onMouseDown={(e) => {
                       e.preventDefault();
                       handleSelect(dev);
                     }}
-                    className="w-full px-3 py-2 text-left text-sm text-zinc-800 hover:bg-zinc-100"
+                    className="w-full text-left px-4 py-3 text-gray-300 hover:bg-[#211f36] hover:text-brand transition-colors focus:bg-[#211f36] focus:outline-none"
                   >
                     {dev.nome}
                   </button>
