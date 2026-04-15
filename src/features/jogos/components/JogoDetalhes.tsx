@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useJogo } from "../hooks/useJogo";
 import type { ObterJogo } from "../types";
 import { Route } from "../../../routes/jogos/$jogoId";
+import { statusDicionario } from "../../../shared/constants/dicionarios";
 
 const JogoDetalhes = () => {
   const [jogo, setJogo] = useState<ObterJogo | null>(null);
@@ -46,7 +47,7 @@ const JogoDetalhes = () => {
                 <div className="w-fit bg-gradient-to-r from-brand to-brand-sec p-[1px] rounded-lg">
                   <div className="bg-[#0C0E1D] px-4 py-1.5 rounded-[7px]">
                     <p className="text-sm font-bold text-transparent bg-gradient-to-r from-brand to-brand-sec bg-clip-text uppercase tracking-wider">
-                      {jogo!.status}
+                      {statusDicionario[jogo!.status] || jogo!.status}
                     </p>
                   </div>
                 </div>

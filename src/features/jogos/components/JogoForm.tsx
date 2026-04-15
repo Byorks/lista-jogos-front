@@ -5,11 +5,14 @@ import type { CriarJogoRequest } from "../types";
 import { useEffect, useState, useCallback } from "react";
 import { desevolvedorasService } from "@/features/desenvolvedoras/service";
 import { Combobox } from "@/shared/Components/Combobox";
+import SuccessDialog from "@/shared/Components/feedback/SuccessDialog";
 
 // TODO:
-// [] Corrigir problema ao selecionar desenvolvedora
-// [] Por algum motivo a capa não apareceu no holow knight
-// [] Corrigir patch que está dando erro (back)
+// [x] Corrigir problema ao selecionar desenvolvedora
+// [x] Por algum motivo a capa não apareceu no holow knight
+// [ ] Corrigir patch que está dando erro (back)
+// [ ] Testar com varias desenvolvedoras mockadas
+// [ ] Adicionar Categorias aos to-dos
 
 type DevOption = {
   id: string;
@@ -42,6 +45,9 @@ export function JogoForm({ onSubmit }: Props) {
       desenvolvedoraId: null,
     },
   });
+
+  // gerencia modal
+  const [successOpen, setSuccessOpen] = useState(false);
 
   // texto visível no input
   const [buscaDev, setBuscaDev] = useState("");
@@ -131,15 +137,21 @@ export function JogoForm({ onSubmit }: Props) {
       <div className="absolute bottom-[-50px] left-[-50px] w-60 h-60 bg-[#FF81FF] opacity-10 blur-3xl rounded-full pointer-events-none" />
 
       <form
-        onSubmit={handleSubmit(
-          async (data) => {
+        // Depois separar o handle
+        onSubmit={handleSubmit(async (data) => {
+          try {
             console.log("submit válido", data);
             await onSubmit(data);
-          },
-          (errors) => {
-            console.log("submit inválido", errors);
-          },
-        )}
+
+            reset();
+            setDevSelecionada(null);
+            setBuscaDev("");
+            setSugestoesDev([]);
+            setSuccessOpen(true);
+          } catch (error) {
+            console.log("Erro ao salvar o jogo", error);
+          }
+        })}
         className="space-y-6 relative z-10"
       >
         <div>
@@ -161,7 +173,9 @@ export function JogoForm({ onSubmit }: Props) {
             Sinopse
           </label>
           <textarea
-            {...register("sinopse")}
+            {...register("sinopse", {
+              setValueAs: (value) => (value === "" ? null : value),
+            })}
             placeholder="Breve descrição do jogo..."
             className={`${inputClasses} min-h-25 resize-y`}
           />
@@ -248,7 +262,9 @@ export function JogoForm({ onSubmit }: Props) {
           </label>
           <input
             type="url"
-            {...register("linkSteam")}
+            {...register("linkSteam", {
+              setValueAs: (value) => (value === "" ? null : value),
+            })}
             placeholder="https://store.steampowered.com/..."
             className={inputClasses}
           />
@@ -319,6 +335,12 @@ export function JogoForm({ onSubmit }: Props) {
           {isSubmitting ? "Enviando..." : "Salvar Jogo"}
         </button>
       </form>
+      <SuccessDialog
+        open={successOpen}
+        onOpenChange={setSuccessOpen}
+        title="Jogo Salvo com sucesso"
+        description="Seu jogo foi salvo com sucesso!"
+      />
     </div>
   );
 }

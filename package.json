@@ -20,10 +20,12 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@radix-ui/react-dialog": "^1.1.15",
     "@tanstack/react-router": "^1.168.4",
     "@tanstack/react-router-devtools": "^1.166.11",
     "axios": "^1.13.6",
     "lucide-react": "^1.8.0",
+    "motion": "^12.38.0",
     "react": "19.2",
     "react-dom": "19.2",
     "react-hook-form": "^7.72.0",
