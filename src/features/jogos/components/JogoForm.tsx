@@ -3,15 +3,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { criarJogoRequestSchema } from "../schemas";
 import type { CriarJogoRequest } from "../types";
 import type { ResumoDesenvolvedoraType } from "@/features/desenvolvedoras/types";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { desevolvedorasService } from "@/features/desenvolvedoras/service";
+import { DevCombobox } from "@/shared/Components/Combobox";
+import { set } from "zod/v3";
 
 // TODO:
 // [] Corrigir problema ao selecionar desenvolvedora
 // [] Por algum motivo a capa não apareceu no holow knight
 // [] Corrigir patch que está dando erro (back)
 
-type DevOption = ResumoDesenvolvedoraType;
+type DevOption = {
+  id: string;
+  nome: string;
+};
 
 interface Props {
   onSubmit: (data: CriarJogoRequest) => Promise<void>;
@@ -40,8 +45,12 @@ export function JogoForm({ onSubmit }: Props) {
     },
   });
 
+  const [desenvolvedoraId, setDesenvolvedoraId] = useState(null);
+
   // texto visível no input
   const [buscaDev, setBuscaDev] = useState("");
+
+  const [devSelecionada, setDevSelecionada] = useState<DevOption | null>(null);
 
   // lista de sugestões de desenvolvedoras
   const [sugestoesDev, setSugestoesDev] = useState<DevOption[]>([]);
@@ -269,11 +278,8 @@ export function JogoForm({ onSubmit }: Props) {
                 shouldValidate: true,
                 shouldDirty: true,
               });
-            }}
-            onFocus={() => {
-              if (sugestoesDev.length > 0) {
-                setMostrarSugestoes(true);
-              }
+
+              setMostrarSugestoes(valor.trim().length >= 3);
             }}
             autoComplete="off"
           />
@@ -294,7 +300,10 @@ export function JogoForm({ onSubmit }: Props) {
                   <button
                     type="button"
                     className="w-full text-left px-4 py-3 text-gray-300 hover:bg-[#211f36] hover:text-[#51FAAA] transition-colors focus:bg-[#211f36] focus:outline-none"
-                    onClick={() => selecionarDesenvolvedora(dev)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      selecionarDesenvolvedora(dev);
+                    }}
                   >
                     {dev.nome}
                   </button>
@@ -307,6 +316,23 @@ export function JogoForm({ onSubmit }: Props) {
             <p className={errorClasses}>{errors.desenvolvedoraId.message}</p>
           )}
         </div>
+
+        <DevCombobox
+          value={devSelecionada}
+          onChange={(dev) => {
+            setDevSelecionada(dev);
+
+            setValue("desenvolvedoraId", dev?.id ?? null, {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
+          }}
+          options={sugestoesDev}
+          loading={loadingDev}
+          onSearch={(term) => {
+            setBuscaDev(term);
+          }}
+        />
 
         <button
           type="submit"
